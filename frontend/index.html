@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Manager</title>
+</head>
+<body>
+  <h1>Employee Manager</h1>
+  <form id="empForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <button type="submit">Add</button>
+  </form>
+  <ul id="empList"></ul>
+
+  <script>
+    async function fetchEmployees() {
+      const res = await fetch('http://localhost:3000/api/employees');
+      const data = await res.json();
+      const list = document.getElementById('empList');
+      list.innerHTML = '';
+      data.forEach(emp => {
+        const li = document.createElement('li');
+        li.innerText = emp.name;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('empForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      await fetch('http://localhost:3000/api/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      document.getElementById('name').value = '';
+      fetchEmployees();
+    });
+
+    fetchEmployees();
+  </script>
+</body>
+</html>

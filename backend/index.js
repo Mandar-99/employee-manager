@@ -12,8 +12,11 @@ app.get('/api/employees', (req, res) => {
   res.json(employees);
 });
 
+
 app.post('/api/employees', (req, res) => {
-  const employee = req.body;
+  const { name, email, department, joiningDate } = req.body;
+  const id = Date.now(); // Simple ID generation
+  const employee = { id, name, email, department, joiningDate };
   employees.push(employee);
   res.status(201).json({ message: 'Employee added!' });
 });
